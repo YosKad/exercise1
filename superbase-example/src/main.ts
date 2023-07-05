@@ -1,32 +1,24 @@
 import "./style.css";
 import { createClient } from "@supabase/supabase-js";
-
 const supabaseUrl = "https://zstywelqfgshdnkypvwi.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpzdHl3ZWxxZmdzaGRua3lwdndpIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODcxODYxMzYsImV4cCI6MjAwMjc2MjEzNn0.6Yt8jkgmCWBKH4Od0yeq3_kRQIRZerf2Lj0LAYV8c7U";
+const supabaseKey =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpzdHl3ZWxxZmdzaGRua3lwdndpIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODcxODYxMzYsImV4cCI6MjAwMjc2MjEzNn0.6Yt8jkgmCWBKH4Od0yeq3_kRQIRZerf2Lj0LAYV8c7U";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function getData() {
-  const { data, error } = await supabase
-  .from("countries")
-  .select();
+  const { data, error } = await supabase.from("countries").select();
 
-  if (error) {
-    console.log(error);
-    return;
-  }
-
+  console.log(error);
   const listCountry = document.getElementById("listCountry");
-
-  if (data) {
+  if (data != null) {
     for (let index = 0; index < data.length; index++) {
+      console.log(data[index]);
       const li = document.createElement("li");
       const deleteIcon = document.createElement("i");
-
-      deleteIcon.className = "fa-regular fa-trash-can";
-      deleteIcon.dataset.id = data[index].id;
+      deleteIcon.innerHTML = `<i class="fa-regular fa-trash-can"></i>`;
+      deleteIcon.id = data[index].id;
       li.textContent = data[index].name;
       li.id = data[index].id;
-
       listCountry?.appendChild(li);
       listCountry?.appendChild(deleteIcon);
     }
@@ -38,47 +30,110 @@ getData();
 const submitBtn = document.getElementById("submit");
 
 submitBtn?.addEventListener("click", async () => {
-  const countryName = document.getElementById("countryName") as HTMLInputElement | null;
-
-  if (!countryName) {
-    return;
-  }
-
+  const countryName = document.getElementById(
+    "countryName"
+  ) as HTMLInputElement | null;
   const { error } = await supabase
-  .from("countries")
-  .insert([{ name: countryName.value }]);
-
-  if (error) {
-    console.log(error);
-  }
+    .from("countries")
+    .insert({ name: countryName?.value });
 });
 
-const listCountry = document.getElementById("listCountry");
+// const listCountry = document.getElementById("listCountry") as HTMLInputElement;
 
-listCountry?.addEventListener("click", async (event) => {
-  if (event.target instanceof HTMLElement) {
-    const deleteIcon = event.target.closest("i");
+// listCountry?.addEventListener("click", async () => {
+//   const { error } = await supabase
 
-    if (deleteIcon) {
-      const countryId = deleteIcon.dataset.id;
+//     .from("countries")
+//     .delete()
+//     .eq("id", listCountry?.value);
+// });
 
-      if (!countryId) {
-        return;
-      }
+// ----- interface work only in typescript ----- \\
+interface userInterface {
+  name: string;
+  age: number;
+  id: string | number;
+}
 
-      const { error } = await supabase.from("countries")
-      .delete()
-      .eq("id", countryId);
+class HumanClass {
+  name: string | undefined;
+  age: number | undefined;
+  id: string | number | undefined;
+}
 
-      if (error) {
-        console.log(error);
-      } else {
-        // Remove the deleted item from the UI
-        const listItem = deleteIcon.parentNode;
-        listItem?.parentNode?.removeChild(listItem);
-        window.location.reload(); // Refresh the page
+const HumanClassVaribale = new HumanClass();
+HumanClassVaribale.age = 31;
+console.log(HumanClassVaribale);
 
-      }
-    }
+const obj: userInterface = {
+  name: "yoskad",
+  age: 30,
+  id: 55,
+};
+
+function addAge(human: userInterface) {
+  human.age = human.age + 1;
+}
+
+console.log(obj);
+
+class Dog {
+  color: string;
+  age: number;
+  size: number | string;
+  weight: number | string;
+
+  constructor(c: string, a: number, s: number | string, w: number | string) {
+    this.color = c;
+    this.age = a;
+    this.size = s;
+    this.weight = w;
   }
-});
+}
+
+const pako = new Dog("pako", 5, "L", 34);
+const ben = new Dog("ben", 8, "S", 59);
+
+console.log(pako, ben);
+
+function sum(a: number, b: number) {
+  return a + b;
+}
+
+console.log(sum(5, 7));
+
+type Gender = "female" | "male";
+type Color = "black" | "grey" | "white";
+
+class Animal {
+  age: number;
+  color: string;
+
+  constructor(age: number, color: string) {
+    this.age = age;
+    this.color = color;
+  }
+
+  showColor() {
+    console.log(`My color is ${this.color}`);
+  }
+  getOlder() {
+    console.log(`My age is ${this.age}`);
+    this.age++;
+  }
+}
+
+class Mammel extends Animal {
+  amountOfMilk: number;
+
+  constructor(milk: number, color: string, age: number) {
+    super(age, color);
+    this.amountOfMilk = milk;
+  }
+  getMoreMilk() {
+    console.log(`My amount of milk is ${this.amountOfMilk} liters`);
+  }
+}
+
+// const animal1 = new Animal(4 ,'black');
+// console.log(animal1.displayInfo());

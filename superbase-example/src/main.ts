@@ -1,5 +1,8 @@
 import "./style.css";
+import {Database} from "/schema";
 import { createClient } from "@supabase/supabase-js";
+
+
 const supabaseUrl = "https://zstywelqfgshdnkypvwi.supabase.co";
 const supabaseKey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpzdHl3ZWxxZmdzaGRua3lwdndpIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODcxODYxMzYsImV4cCI6MjAwMjc2MjEzNn0.6Yt8jkgmCWBKH4Od0yeq3_kRQIRZerf2Lj0LAYV8c7U";
@@ -137,3 +140,61 @@ class Mammel extends Animal {
 
 // const animal1 = new Animal(4 ,'black');
 // console.log(animal1.displayInfo());
+
+
+function returnMe <T>(arg: T):T {
+  return arg;
+}
+
+const n = returnMe<number>(30)
+console.log(n);
+
+
+function returnMe3<T extends string | string [] | number>(arg: T): T {
+  return arg;
+}
+
+const arrSrting3 = returnMe3<string[]>(['s' , 'w'])
+
+console.log(arrSrting3);
+
+//type gender = 'Male' | 'Famle';
+
+
+// method 1 --------// 
+interface BoxInter {
+    value: string;
+}
+
+function getBox<T extends BoxInter> (value:T) :T {
+  return value;
+}
+
+const print = getBox<BoxInter>({value: 'print'});
+
+console.log(print);
+
+
+// method 2 ------///
+interface BoxInter1 <T> {
+  name: string;
+}
+
+function getName <T extends BoxInter1<string>> (name:T) :T {
+  return name;
+}
+
+const printName = getName<BoxInter1<string>>({name: 'yoskad'});
+
+console.log(printName);
+
+
+
+// method 3 ------///
+interface BoxInter2 <T> {
+  name: T;
+}
+
+function boxUser<T>(box: BoxInter2<T>) :T {
+  return box.name;
+}
